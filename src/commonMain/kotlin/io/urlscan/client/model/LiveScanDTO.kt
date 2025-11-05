@@ -1,19 +1,11 @@
 package io.urlscan.client.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-@Serializable
-enum class LiveScanVisibility {
-    @SerialName("public") PUBLIC,
-    @SerialName("unlisted") UNLISTED,
-    @SerialName("private") PRIVATE
-}
 
 @Serializable
 data class LiveScanTask(
     val url: String,
-    val visibility: LiveScanVisibility? = null
+    val visibility: Visibility? = null
 )
 
 @Serializable
