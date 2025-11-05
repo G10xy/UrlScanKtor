@@ -1,15 +1,13 @@
-import org.gradle.kotlin.dsl.kotlin
-import org.gradle.kotlin.dsl.plugin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
 // Centralized versions
-val kotlinPluginVersion = "2.2.21"          // used only for reference; plugins block keeps literal
-val androidGradlePluginVersion = "8.12.3"   // used only for reference; plugins block keeps literal
+val kotlinPluginVersion = "2.2.21"
+val androidGradlePluginVersion = "8.12.3"
 val ktorVersion = "3.3.0"
-val coroutinesVersion = "1.8.0"
-val serializationVersion = "1.6.3"
-val datetimeVersion = "0.5.0"
+val coroutinesVersion = "1.9.0"
+val serializationVersion = "1.7.3"
+val datetimeVersion = "0.6.1"
 val slf4jVersion = "2.0.9"
 val junitVersion = "4.13.2"
 val logbackVersion = "1.4.14"
@@ -34,9 +32,7 @@ kotlin {
         }
     }
 
-    // ========================================
     // JVM Target - Backend services, desktop apps
-    // ========================================
     jvm {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
@@ -47,9 +43,7 @@ kotlin {
         }
     }
 
-    // ========================================
     // Android Target - Mobile apps
-    // ========================================
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
@@ -58,9 +52,7 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
 
-    // ========================================
     // iOS Targets - iPhone, iPad, Simulator
-    // ========================================
     val iosTargets = listOf(
         iosX64(),           // iOS Simulator on Intel Macs
         iosArm64(),         // iOS Device (64-bit ARM)
@@ -74,26 +66,18 @@ kotlin {
         }
     }
 
-    // ========================================
-    // Linux Targets - Servers, CLI tools
-    // ========================================
-    linuxX64()    // Linux x86_64
-    linuxArm64()  // Linux ARM
+    // Linux Targets
+    linuxX64()
+    linuxArm64()
 
-    // ========================================
     // macOS Targets - Desktop apps, CLI tools
-    // ========================================
-    macosX64()    // macOS Intel
-    macosArm64()  // macOS Apple Silicon (M1/M2/M3)
+    macosX64()
+    macosArm64()
 
-    // ========================================
     // Windows Target - Desktop apps, CLI tools
-    // ========================================
-    mingwX64()    // Windows 64-bit
+    mingwX64()
 
-    // ========================================
     // JavaScript Target - Web and Node.js
-    // ========================================
     js(KotlinJsCompilerType.IR) {
         browser {
             testTask {
@@ -106,27 +90,20 @@ kotlin {
         binaries.executable()
     }
 
-    // ========================================
     // Source Sets Configuration
-    // ========================================
     sourceSets {
-        // ========================================
         // Common Source Set - Shared across ALL platforms
-        // ========================================
         val commonMain by getting {
             dependencies {
-                // Ktor Client - HTTP client library
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                // Coroutines - Async/await support
+
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
-                // Serialization - JSON parsing
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
 
-                // DateTime - Timestamp handling (optional)
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
             }
         }
@@ -139,9 +116,7 @@ kotlin {
             }
         }
 
-        // ========================================
         // JVM Source Set - JVM and Android
-        // ========================================
         val jvmMain by getting {
             dependencies {
                 // OkHttp engine for JVM/Android
@@ -160,9 +135,12 @@ kotlin {
             }
         }
 
-        // ========================================
+        // Android Source Set - depends on JVM
+        androidMain {
+            dependsOn(jvmMain)
+        }
+
         // iOS Source Set - Shared across all iOS targets
-        // ========================================
         val iosMain by creating {
             dependsOn(commonMain)
             dependencies {
@@ -200,9 +178,7 @@ kotlin {
             dependsOn(iosTest)
         }
 
-        // ========================================
         // Native Source Set - Linux, macOS, Windows
-        // ========================================
         val nativeMain by creating {
             dependsOn(commonMain)
             dependencies {
@@ -234,9 +210,7 @@ kotlin {
             dependsOn(nativeMain)
         }
 
-        // ========================================
         // JavaScript Source Set
-        // ========================================
         val jsMain by getting {
             dependencies {
                 // JS engine for browser and Node.js
@@ -252,9 +226,7 @@ kotlin {
     }
 }
 
-// ========================================
 // Android Library Configuration
-// ========================================
 android {
     namespace = "io.urlscan.client"
     compileSdk = 34
@@ -273,10 +245,6 @@ android {
     }
 }
 
-
-// ========================================
-// Custom Tasks
-// ========================================
 
 // Task to print all available targets
 tasks.register("printTargets") {
