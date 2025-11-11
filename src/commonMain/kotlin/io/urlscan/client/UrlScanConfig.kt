@@ -1,39 +1,67 @@
 package io.urlscan.client
 
+import io.urlscan.client.internal.HttpClientDefaults
+
+/**
+ * Proxy type for HTTP client configuration.
+ */
+enum class ProxyType {
+    HTTP,
+    HTTPS,
+    SOCKS
+}
 
 /**
  * Configuration for the UrlScan client.
+ * All parameters have sensible defaults that can be overridden.
  *
  * @property apiKey Your urlscan.io API key (required for most operations)
- * @property baseUrl Base URL for the API (default: https://urlscan.io/api/v1)
- * @property timeout Request timeout in milliseconds (default: 30000)
- * @property connectTimeout Connection timeout in milliseconds (default: 10000)
- * @property socketTimeout Socket timeout in milliseconds (default: 30000)
- * @property enableLogging Enable debug logging (default: false)
- * @property followRedirects Follow HTTP redirects (default: true)
- * @property maxRetries Maximum number of retry attempts on failure (default: 3)
- *
+ * @property baseUrl Base URL for the API
+ * @property timeout Request timeout in milliseconds
+ * @property connectTimeout Connection timeout in milliseconds
+ * @property socketTimeout Socket timeout in milliseconds
+ * @property enableLogging Enable debug logging
+ * @property followRedirects Follow HTTP redirects
+ * @property maxRetries Maximum number of retry attempts on failure
+ * @property proxyUrl Optional proxy URL (e.g., "http://proxy.company.com:8080")
+ * @property proxyType Type of proxy (HTTP, HTTPS, or SOCKS)
  */
 data class UrlScanConfig(
     val apiKey: String = "",
-    val baseUrl: String = "https://urlscan.io/api/v1",
-    val timeout: Long = 30_000,
-    val connectTimeout: Long = 10_000,
-    val socketTimeout: Long = 30_000,
-    val enableLogging: Boolean = false,
-    val followRedirects: Boolean = true,
-    val maxRetries: Int = 3
+    val baseUrl: String = HttpClientDefaults.DEFAULT_BASE_URL,
+    val timeout: Long = HttpClientDefaults.DEFAULT_TIMEOUT_MS,
+    val connectTimeout: Long = HttpClientDefaults.DEFAULT_CONNECT_TIMEOUT_MS,
+    val socketTimeout: Long = HttpClientDefaults.DEFAULT_SOCKET_TIMEOUT_MS,
+    val enableLogging: Boolean = HttpClientDefaults.DEFAULT_ENABLE_LOGGING,
+    val followRedirects: Boolean = HttpClientDefaults.DEFAULT_FOLLOW_REDIRECTS,
+    val maxRetries: Int = HttpClientDefaults.DEFAULT_MAX_RETRIES,
+    val proxyUrl: String? = null,
+    val proxyType: ProxyType = ProxyType.HTTP
 ) {
     init {
         require(timeout > 0) { "Timeout must be positive" }
         require(connectTimeout > 0) { "Connect timeout must be positive" }
         require(socketTimeout > 0) { "Socket timeout must be positive" }
         require(maxRetries >= 0) { "Max retries must be non-negative" }
+
+        require(connectTimeout <= socketTimeout) {
+            "Connect timeout ($connectTimeout ms) must be <= socket timeout ($socketTimeout ms)"
+        }
+        require(socketTimeout <= timeout) {
+            "Socket timeout ($socketTimeout ms) must be <= request timeout ($timeout ms)"
+        }
+
+        // Validate proxy URL if provided
+        proxyUrl?.let { url ->
+            require(url.isNotBlank()) { "Proxy URL cannot be blank" }
+            require(url.startsWith("http://") || url.startsWith("https://") || url.startsWith("socks://")) {
+                "Proxy URL must start with http://, https://, or socks://"
+            }
+        }
     }
 
     /**
      * Creates a copy of this config with the specified API key.
-     * Useful for creating configs from environment variables.
      */
     fun withApiKey(apiKey: String): UrlScanConfig = copy(apiKey = apiKey)
 
@@ -44,11 +72,12 @@ data class UrlScanConfig(
 
     /**
      * Creates a copy of this config with custom timeout.
+     * Sets all timeouts to the same value.
      */
     fun withTimeout(timeout: Long): UrlScanConfig = copy(
         timeout = timeout,
-        connectTimeout = timeout,
-        socketTimeout = timeout
+        connectTimeout = timeout / 3,  // 1/3 of total timeout
+        socketTimeout = timeout / 2    // 1/2 of total timeout
     )
 
     /**
@@ -63,7 +92,6 @@ data class UrlScanConfig(
 
     /**
      * Creates a copy of this config with a custom base URL.
-     * Useful for pointing to a proxy or a test environment.
      */
     fun withBaseUrl(url: String): UrlScanConfig = copy(baseUrl = url)
 
@@ -77,4 +105,24 @@ data class UrlScanConfig(
      */
     fun withSocketTimeout(timeout: Long): UrlScanConfig = copy(socketTimeout = timeout)
 
+    /**
+     * Creates a copy of this config with proxy settings.
+     *
+     * @param proxyUrl The proxy URL (e.g., "http://proxy.company.com:8080")
+     * @param proxyType The type of proxy (default: HTTP)
+     */
+    fun withProxy(proxyUrl: String, proxyType: ProxyType = ProxyType.HTTP): UrlScanConfig =
+        copy(proxyUrl = proxyUrl, proxyType = proxyType)
+
+    companion object {
+        /**
+         * Creates a default configuration.
+         */
+        fun default(): UrlScanConfig = UrlScanConfig()
+
+        /**
+         * Creates a configuration with just an API key using all defaults.
+         */
+        fun withApiKey(apiKey: String): UrlScanConfig = UrlScanConfig(apiKey = apiKey)
+    }
 }
