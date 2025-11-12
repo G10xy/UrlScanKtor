@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
 val kotlinPluginVersion = "2.2.21"
 val androidGradlePluginVersion = "8.12.3"
-val ktorVersion = "3.3.0"
+val ktorVersion = "3.3.2"
 val coroutinesVersion = "1.9.0"
 val serializationVersion = "1.7.3"
 val datetimeVersion = "0.6.1"
