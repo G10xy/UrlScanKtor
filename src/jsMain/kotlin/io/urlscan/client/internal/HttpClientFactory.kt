@@ -125,7 +125,7 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
 
                 if (HttpClientDefaults.Logging.FILTER_URLSCAN_ONLY) {
                     filter { request ->
-                        request.url.host.contains("urlscan.io", ignoreCase = true)
+                        request.url.host.contains(config.apiHost, ignoreCase = true)
                     }
                 }
             }

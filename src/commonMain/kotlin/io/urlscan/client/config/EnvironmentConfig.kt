@@ -5,8 +5,7 @@ import io.urlscan.client.internal.HttpClientDefaults
 
 /**
  * Environment-based configuration loader.
- * This is an expect/actual pattern for loading environment variables
- * across different platforms.
+ * This is an expect/actual pattern for loading environment variables across different platforms.
  */
 expect object EnvironmentConfig {
     fun get(key: String): String?

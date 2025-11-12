@@ -15,19 +15,23 @@ enum class ProxyType {
  * Configuration for the UrlScan client.
  * All parameters have sensible defaults that can be overridden.
  *
- * @property apiKey Your urlscan.io API key (required for most operations)
- * @property baseUrl Base URL for the API
- * @property timeout Request timeout in milliseconds
- * @property connectTimeout Connection timeout in milliseconds
- * @property socketTimeout Socket timeout in milliseconds
- * @property enableLogging Enable debug logging
- * @property followRedirects Follow HTTP redirects
- * @property maxRetries Maximum number of retry attempts on failure
- * @property proxyUrl Optional proxy URL (e.g., "http://proxy.company.com:8080")
- * @property proxyType Type of proxy (HTTP, HTTPS, or SOCKS)
+ * @property apiKey Your urlscan.io API key (required for most operations).
+ * @property apiHost Hostname for the API (e.g., "api.urlscan.io"). Used when constructing requests if `baseUrl` is not overridden.
+ * @property baseUrl Base URL for the API including scheme (e.g., "https://api.urlscan.io"). Overrides `apiHost` when provided.
+ * @property timeout Request timeout in milliseconds for the entire request lifecycle.
+ * @property connectTimeout Connection timeout in milliseconds — time allowed to establish a TCP connection.
+ * @property socketTimeout Socket timeout in milliseconds — time to wait for data between packets after the connection is established.
+ * @property enableLogging Enable debug logging for HTTP requests, responses, and client internals.
+ * @property followRedirects Whether the HTTP client should automatically follow 3xx redirects.
+ * @property maxRetries Maximum number of retry attempts for transient failures (non-negative).
+ * @property isProxyNeeded Flag indicating whether requests should be routed through a proxy.
+ * @property proxyUrl Optional proxy URL including scheme and host (e.g., "http://proxy.company.com:8080" or "socks://proxy:1080").
+ * @property proxyPort Optional explicit proxy port; ignored if a port is already included in `proxyUrl` or if `proxyUrl` is null.
+ * @property proxyType Type of proxy to use when `isProxyNeeded` is true (HTTP, HTTPS, or SOCKS).
  */
 data class UrlScanConfig(
     val apiKey: String = "",
+    val apiHost: String = HttpClientDefaults.DEFAULT_API_HOST,
     val baseUrl: String = HttpClientDefaults.DEFAULT_BASE_URL,
     val timeout: Long = HttpClientDefaults.DEFAULT_TIMEOUT_MS,
     val connectTimeout: Long = HttpClientDefaults.DEFAULT_CONNECT_TIMEOUT_MS,

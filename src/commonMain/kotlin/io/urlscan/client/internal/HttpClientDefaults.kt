@@ -6,7 +6,8 @@ package io.urlscan.client.internal
  * These can be overridden via UrlScanConfig or environment variables.
  */
 internal object HttpClientDefaults {
-    const val DEFAULT_BASE_URL = "https://urlscan.io/api/v1"
+    const val DEFAULT_API_HOST = "urlscan.io"
+    const val DEFAULT_BASE_URL = "https://$DEFAULT_API_HOST"
     const val DEFAULT_TIMEOUT_MS = 30_000L
     const val DEFAULT_CONNECT_TIMEOUT_MS = 10_000L
     const val DEFAULT_SOCKET_TIMEOUT_MS = 30_000L

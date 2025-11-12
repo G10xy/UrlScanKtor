@@ -23,14 +23,17 @@ import io.urlscan.client.model.ScanResult
 
 /**
  * Main client for interacting with the urlscan.io API.
- *
  * @property config Configuration for the client including API key and base URL
- *
+ * @property httpClient Ktor HTTP client used for making requests
  */
 class UrlScanClient(
-    private val config: UrlScanConfig = UrlScanConfig("")
-) {
+    private val config: UrlScanConfig = UrlScanConfig(""),
     private val httpClient: HttpClient = createPlatformHttpClient(config)
+) {
+
+    val generic: GenericApi by lazy {
+        GenericApi(httpClient, config)
+    }
 
     /**
      * Submit a URL for scanning.
