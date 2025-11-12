@@ -35,7 +35,9 @@ data class UrlScanConfig(
     val enableLogging: Boolean = HttpClientDefaults.DEFAULT_ENABLE_LOGGING,
     val followRedirects: Boolean = HttpClientDefaults.DEFAULT_FOLLOW_REDIRECTS,
     val maxRetries: Int = HttpClientDefaults.DEFAULT_MAX_RETRIES,
+    val isProxyNeeded: Boolean = false,
     val proxyUrl: String? = null,
+    val proxyPort: Int = 0,
     val proxyType: ProxyType = ProxyType.HTTP
 ) {
     init {
