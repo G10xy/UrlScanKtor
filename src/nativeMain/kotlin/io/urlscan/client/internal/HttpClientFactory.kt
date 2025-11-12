@@ -143,5 +143,6 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
         }
 
         expectSuccess = false
+        install(HttpPlainText)
     }
 }

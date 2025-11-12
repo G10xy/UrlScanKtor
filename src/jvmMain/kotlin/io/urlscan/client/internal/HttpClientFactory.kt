@@ -97,7 +97,7 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
             validateResponse { response ->
                 val requestTime = response.responseTime.timestamp - response.requestTime.timestamp
                 if (requestTime > 5000 && config.enableLogging) {
-                    println("⚠️ Slow response: ${requestTime}ms for ${response.call.request.url}")
+                    println("Slow response: ${requestTime}ms for ${response.call.request.url}")
                 }
             }
         }
