@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
-// Centralized versions
 val kotlinPluginVersion = "2.2.21"
 val androidGradlePluginVersion = "8.12.3"
 val ktorVersion = "3.3.0"
@@ -32,7 +31,6 @@ kotlin {
         }
     }
 
-    // JVM Target - Backend services, desktop apps
     jvm {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
@@ -43,7 +41,6 @@ kotlin {
         }
     }
 
-    // Android Target - Mobile apps
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
@@ -54,9 +51,9 @@ kotlin {
 
     // iOS Targets - iPhone, iPad, Simulator
     val iosTargets = listOf(
-        iosX64(),           // iOS Simulator on Intel Macs
-        iosArm64(),         // iOS Device (64-bit ARM)
-        iosSimulatorArm64() // iOS Simulator on Apple Silicon
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
     )
 
     iosTargets.forEach { target ->
@@ -66,18 +63,14 @@ kotlin {
         }
     }
 
-    // Linux Targets
     linuxX64()
     linuxArm64()
 
-    // macOS Targets - Desktop apps, CLI tools
     macosX64()
     macosArm64()
 
-    // Windows Target - Desktop apps, CLI tools
     mingwX64()
 
-    // JavaScript Target - Web and Node.js
     js(KotlinJsCompilerType.IR) {
         browser {
             testTask {
@@ -90,7 +83,6 @@ kotlin {
         binaries.executable()
     }
 
-    // Source Sets Configuration
     sourceSets {
         // Common Source Set - Shared across ALL platforms
         val commonMain by getting {
@@ -99,11 +91,9 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
+                implementation("io.ktor:ktor-client-encoding:${ktorVersion}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
-
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
             }
         }
@@ -116,7 +106,6 @@ kotlin {
             }
         }
 
-        // JVM Source Set - JVM and Android
         val jvmMain by getting {
             dependencies {
                 // OkHttp engine for JVM/Android
@@ -144,7 +133,6 @@ kotlin {
         val iosMain by creating {
             dependsOn(commonMain)
             dependencies {
-                // Darwin engine for iOS
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
             }
         }
@@ -161,7 +149,6 @@ kotlin {
             dependsOn(iosMain)
         }
 
-        // iOS Tests
         val iosTest by creating {
             dependsOn(commonTest)
         }
@@ -187,7 +174,6 @@ kotlin {
             }
         }
 
-        // Linux targets
         val linuxX64Main by getting {
             dependsOn(nativeMain)
         }
@@ -196,7 +182,6 @@ kotlin {
             dependsOn(nativeMain)
         }
 
-        // macOS targets
         val macosX64Main by getting {
             dependsOn(nativeMain)
         }
@@ -205,12 +190,10 @@ kotlin {
             dependsOn(nativeMain)
         }
 
-        // Windows target
         val mingwX64Main by getting {
             dependsOn(nativeMain)
         }
 
-        // JavaScript Source Set
         val jsMain by getting {
             dependencies {
                 // JS engine for browser and Node.js
@@ -226,7 +209,6 @@ kotlin {
     }
 }
 
-// Android Library Configuration
 android {
     namespace = "io.urlscan.client"
     compileSdk = 34
@@ -236,8 +218,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -275,31 +257,5 @@ tasks.register("printTargets") {
         println("  ./gradlew jsNodeDistribution       # Build JS for Node.js")
         println("  ./gradlew publishToMavenLocal      # Publish to local Maven")
         println("=".repeat(50) + "\n")
-    }
-}
-
-// Task to clean all build outputs
-tasks.register("cleanAll") {
-    group = "build"
-    description = "Cleans all build outputs including platform-specific builds"
-
-    dependsOn("clean")
-
-    doLast {
-        println("✓ All build outputs cleaned")
-    }
-}
-
-// Task to build and test everything
-tasks.register("buildAll") {
-    group = "build"
-    description = "Builds and tests all targets"
-
-    dependsOn("build", "test")
-
-    doLast {
-        println("\n" + "=".repeat(50))
-        println("✓ Build completed successfully!")
-        println("=".repeat(50))
     }
 }
