@@ -3,19 +3,18 @@ package io.urlscan.client.internal
 import io.ktor.client.*
 import io.ktor.client.engine.darwin.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.compression.ContentEncoding
+import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.accept
-import io.ktor.client.request.header
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.urlscan.client.UrlScanConfig
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
+import platform.Foundation.NSURLRequestNetworkServiceTypeDefault
 import platform.Foundation.NSURLSessionAuthChallengeCancelAuthenticationChallenge
 import platform.Foundation.NSURLSessionAuthChallengeUseCredential
-import platform.Foundation.NSURLRequestNetworkServiceTypeDefault
 import platform.Foundation.setWaitsForConnectivity
 
 /**

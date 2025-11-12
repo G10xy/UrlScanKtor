@@ -1,6 +1,6 @@
 package io.urlscan.client.internal
 
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import io.urlscan.client.UrlScanConfig
 
 /**
