@@ -118,3 +118,5 @@ test-results/
 *.test
 coverage/
 jacoco.exec
+
+.json
