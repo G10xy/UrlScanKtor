@@ -11,7 +11,7 @@ internal object HttpClientDefaults {
     const val DEFAULT_CONNECT_TIMEOUT_MS = 10_000L
     const val DEFAULT_SOCKET_TIMEOUT_MS = 30_000L
     const val DEFAULT_MAX_RETRIES = 3
-    const val DEFAULT_FOLLOW_REDIRECTS = true
+    const val DEFAULT_FOLLOW_REDIRECTS = false
     const val DEFAULT_ENABLE_LOGGING = false
 
     // User Agent
