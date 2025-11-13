@@ -10,6 +10,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.urlscan.client.UrlScanConfig
+import io.urlscan.client.exception.installExceptionHandling
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
 import platform.Foundation.NSURLRequestNetworkServiceTypeDefault
@@ -153,5 +154,6 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
 
         expectSuccess = false
         install(HttpPlainText)
+        installExceptionHandling()
     }
 }

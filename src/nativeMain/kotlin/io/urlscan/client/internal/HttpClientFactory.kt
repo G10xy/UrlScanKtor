@@ -26,6 +26,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import io.urlscan.client.ProxyType
 import io.urlscan.client.UrlScanConfig
+import io.urlscan.client.exception.installExceptionHandling
 import kotlinx.serialization.json.Json
 
 
@@ -119,7 +120,7 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
             validateResponse { response ->
                 val requestTime = response.responseTime.timestamp - response.requestTime.timestamp
                 if (requestTime > 5000 && config.enableLogging) {
-                    println("⚠️ Slow response: ${requestTime}ms for ${response.call.request.url}")
+                    println("Slow response: ${requestTime}ms for ${response.call.request.url}")
                 }
             }
         }
@@ -156,5 +157,6 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
 
         expectSuccess = false
         install(HttpPlainText)
+        installExceptionHandling()
     }
 }

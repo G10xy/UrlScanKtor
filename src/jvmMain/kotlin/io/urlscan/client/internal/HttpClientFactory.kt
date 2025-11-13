@@ -21,6 +21,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.urlscan.client.UrlScanConfig
+import io.urlscan.client.exception.installExceptionHandling
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 import okhttp3.Protocol
@@ -145,5 +146,6 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
 
         expectSuccess = false
         install(HttpPlainText)
+        installExceptionHandling()
     }
 }
