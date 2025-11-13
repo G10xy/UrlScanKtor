@@ -10,7 +10,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.urlscan.client.exception.ApiException
 import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
@@ -20,7 +19,6 @@ import io.urlscan.client.internal.createPlatformHttpClient
 import io.urlscan.client.model.SavedSearchResponse
 import io.urlscan.client.model.ScanRequest
 import io.urlscan.client.model.ScanResponse
-import io.urlscan.client.model.ScanResult
 
 /**
  * Main client for interacting with the urlscan.io API.
@@ -34,6 +32,10 @@ class UrlScanClient(
 
     val generic: GenericApi by lazy {
         GenericApi(httpClient, config)
+    }
+
+    val search: SearchApi by lazy {
+        SearchApi(httpClient, config)
     }
 
     /**
@@ -56,26 +58,6 @@ class UrlScanClient(
             throw handleClientException(e)
         } catch (e: Exception) {
             throw Exception("Network error during scan submission: ${e.message}", e)
-        }
-    }
-
-    /**
-     * Retrieve the results of a completed scan.
-     *
-     * @param scanId The scanId of the scan (returned from submitScan)
-     * @return ScanResult containing all scan data
-     * @throws NotFoundException if the scan scanId doesn't exist
-     * @throws UrlScanException for other API errors
-     */
-    suspend fun getResult(scanId: String): ScanResult {
-        return try {
-            httpClient.get("${config.baseUrl}/result/$scanId/") {
-                header("API-Key", config.apiKey)
-            }.body()
-        } catch (e: ClientRequestException) {
-            throw handleClientException(e)
-        } catch (e: Exception) {
-            throw Exception("Network error retrieving result: ${e.message}", e)
         }
     }
 
