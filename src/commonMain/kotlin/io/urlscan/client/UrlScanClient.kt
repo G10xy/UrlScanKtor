@@ -21,6 +21,9 @@ class UrlScanClient(
         SearchApi(httpClient, config)
     }
 
+    val scanning: ScanningApi by lazy {
+        ScanningApi(httpClient, config)
+    }
 
 
 /*
