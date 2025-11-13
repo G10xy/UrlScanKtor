@@ -15,6 +15,7 @@ import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
 import io.urlscan.client.exception.UrlScanException
+import io.urlscan.client.exception.handleClientException
 import io.urlscan.client.internal.createPlatformHttpClient
 import io.urlscan.client.model.SavedSearchResponse
 import io.urlscan.client.model.ScanRequest
@@ -140,25 +141,7 @@ class UrlScanClient(
         }
     }
 
-    /**
-     * Helper function to handle HTTP client exceptions and convert them
-     * to appropriate UrlScanException subclasses.
-     */
-    private fun handleClientException(e: ClientRequestException): UrlScanException {
-        return when (e.response.status.value) {
-            401, 403 -> AuthenticationException("Invalid or missing API key")
-            404 -> NotFoundException("Resource not found: ${e.message}")
-            429 -> {
-                val retryAfter = e.response.headers["Retry-After"]?.toLongOrNull()
-                RateLimitException("Rate limit exceeded", retryAfter)
-            }
-            400 -> ApiException(400, "Bad request: ${e.message}")
-            else -> ApiException(
-                e.response.status.value,
-                "API error (${e.response.status.value}): ${e.message}"
-            )
-        }
-    }
+
 
     /**
      * Close the HTTP client and release resources.
