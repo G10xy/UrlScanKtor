@@ -1,24 +1,7 @@
 package io.urlscan.client
 
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.urlscan.client.exception.AuthenticationException
-import io.urlscan.client.exception.NotFoundException
-import io.urlscan.client.exception.RateLimitException
-import io.urlscan.client.exception.UrlScanException
-import io.urlscan.client.exception.handleClientException
 import io.urlscan.client.internal.createPlatformHttpClient
-import io.urlscan.client.model.SavedSearchResponse
-import io.urlscan.client.model.ScanRequest
-import io.urlscan.client.model.ScanResponse
 
 /**
  * Main client for interacting with the urlscan.io API.
@@ -38,6 +21,9 @@ class UrlScanClient(
         SearchApi(httpClient, config)
     }
 
+
+
+/*
     /**
      * Submit a URL for scanning.
      *
@@ -60,68 +46,7 @@ class UrlScanClient(
             throw Exception("Network error during scan submission: ${e.message}", e)
         }
     }
-
-    /**
-     * Search for scans matching a query.
-     *
-     * @param query The search query (e.g., "page.domain:example.com")
-     * @param size Number of results to return (default: 100, max: 10000)
-     * @return SearchResponse containing matching scans
-     * @throws UrlScanException for API errors
-     */
-    suspend fun search(query: String, size: Int = 100): SavedSearchResponse {
-        return try {
-            httpClient.get("${config.baseUrl}/search/") {
-                header("API-Key", config.apiKey)
-                parameter("q", query)
-                parameter("size", size)
-            }.body()
-        } catch (e: ClientRequestException) {
-            throw handleClientException(e)
-        } catch (e: Exception) {
-            throw Exception("Network error during search: ${e.message}", e)
-        }
-    }
-
-    /**
-     * Get the screenshot of a scan result.
-     *
-     * @param uuid The UUID of the scan
-     * @return ByteArray containing the PNG image data
-     * @throws NotFoundException if the scan UUID doesn't exist
-     * @throws UrlScanException for other API errors
-     */
-    suspend fun getScreenshot(uuid: String): ByteArray {
-        return try {
-            httpClient.get("${config.baseUrl}/screenshots/$uuid.png") {
-                header("API-Key", config.apiKey)
-            }.body()
-        } catch (e: ClientRequestException) {
-            throw handleClientException(e)
-        } catch (e: Exception) {
-            throw Exception("Network error retrieving screenshot: ${e.message}", e)
-        }
-    }
-
-    /**
-     * Get the DOM content of a scan result.
-     *
-     * @param uuid The UUID of the scan
-     * @return String containing the DOM HTML
-     * @throws NotFoundException if the scan UUID doesn't exist
-     * @throws UrlScanException for other API errors
-     */
-    suspend fun getDom(uuid: String): String {
-        return try {
-            httpClient.get("${config.baseUrl}/dom/$uuid/") {
-                header("API-Key", config.apiKey)
-            }.body()
-        } catch (e: ClientRequestException) {
-            throw handleClientException(e)
-        } catch (e: Exception) {
-            throw Exception("Network error retrieving DOM: ${e.message}", e)
-        }
-    }
+*/
 
 
 
