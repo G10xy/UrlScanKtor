@@ -17,12 +17,16 @@ class UrlScanClient(
         GenericApi(httpClient, config)
     }
 
+    val scanning: ScanningApi by lazy {
+        ScanningApi(httpClient, config)
+    }
+
     val search: SearchApi by lazy {
         SearchApi(httpClient, config)
     }
 
-    val scanning: ScanningApi by lazy {
-        ScanningApi(httpClient, config)
+    val liveScanning: LiveScanningApi by lazy {
+        LiveScanningApi(httpClient, config)
     }
 
 
