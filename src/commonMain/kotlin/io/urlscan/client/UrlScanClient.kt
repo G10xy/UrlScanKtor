@@ -37,7 +37,9 @@ class UrlScanClient(
         HostnamesApi(httpClient, config)
     }
 
-
+    val brands: BrandsApi by lazy {
+        BrandsApi(httpClient, config)
+    }
 
 /*
     /**
