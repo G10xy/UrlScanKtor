@@ -29,6 +29,9 @@ class UrlScanClient(
         LiveScanningApi(httpClient, config)
     }
 
+    val subscriptions: SubscriptionsApi by lazy {
+        SubscriptionsApi(httpClient, config)
+    }
 
 
 /*
