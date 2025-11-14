@@ -33,6 +33,11 @@ class UrlScanClient(
         SubscriptionsApi(httpClient, config)
     }
 
+    val hostname: HostnamesApi by lazy {
+        HostnamesApi(httpClient, config)
+    }
+
+
 
 /*
     /**

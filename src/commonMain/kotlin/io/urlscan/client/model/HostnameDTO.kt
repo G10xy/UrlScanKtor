@@ -15,11 +15,6 @@ enum class HostnameHistorySource {
 }
 
 @Serializable
-enum class HostnameHistoryDataType {
-    @SerialName("json") JSON
-}
-
-@Serializable
 data class HostnameHistoryResult(
     @SerialName("seen_on")
     val seenOn: String,
@@ -31,8 +26,16 @@ data class HostnameHistoryResult(
     @SerialName("last_seen")
     val lastSeen: String,
     @SerialName("data_type")
-    val dataType: HostnameHistoryDataType?,
-    val data: JsonObject?
+    val dataType: String?,
+    val data: HostnameData?
+)
+
+@Serializable
+data class HostnameData (
+    val ttl: Int?,
+    val rdata: String?,
+    val geoip: GeoIpInfo,
+    val asn: AsnInfo
 )
 
 @Serializable
