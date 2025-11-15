@@ -41,6 +41,10 @@ class UrlScanClient(
         BrandsApi(httpClient, config)
     }
 
+    val channels: ChannelsApi by lazy {
+        ChannelsApi(httpClient, config)
+    }
+
 /*
     /**
      * Submit a URL for scanning.
