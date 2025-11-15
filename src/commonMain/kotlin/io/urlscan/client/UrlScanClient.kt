@@ -2,6 +2,7 @@ package io.urlscan.client
 
 import io.ktor.client.HttpClient
 import io.urlscan.client.internal.createPlatformHttpClient
+import io.urlscan.client.model.Incident
 
 /**
  * Main client for interacting with the urlscan.io API.
@@ -45,30 +46,9 @@ class UrlScanClient(
         ChannelsApi(httpClient, config)
     }
 
-/*
-    /**
-     * Submit a URL for scanning.
-     *
-     * @param request The scan request containing the URL and optional parameters
-     * @return ScanResponse containing the UUID and result URL
-     * @throws AuthenticationException if API key is invalid
-     * @throws RateLimitException if rate limit is exceeded
-     * @throws UrlScanException for other API errors
-     */
-    suspend fun submitScan(request: ScanRequest): ScanResponse {
-        return try {
-            httpClient.post("${config.baseUrl}/scan/") {
-                contentType(ContentType.Application.Json)
-                header("API-Key", config.apiKey)
-                setBody(request)
-            }.body()
-        } catch (e: ClientRequestException) {
-            throw handleClientException(e)
-        } catch (e: Exception) {
-            throw Exception("Network error during scan submission: ${e.message}", e)
-        }
+    val incidents: IncidentsApi by lazy {
+        IncidentsApi(httpClient, config)
     }
-*/
 
 
 

@@ -14,15 +14,6 @@ enum class SubscriptionFrequency {
 }
 
 /**
- * Enumeration of incident visibility levels.
- */
-@Serializable
-enum class IncidentVisibility {
-    @SerialName("unlisted") UNLISTED,
-    @SerialName("private") PRIVATE
-}
-
-/**
  * Enumeration of incident creation modes.
  */
 @Serializable
