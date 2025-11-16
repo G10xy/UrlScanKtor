@@ -1,6 +1,6 @@
 # UrlScanKtor
 
-A **Kotlin Multiplatform** HTTP client library built with **Ktor** for URL scanning and web requests across all major platforms.  
+A **Kotlin Multiplatform** REST client library built with **Ktor** to interact with UrlScan.IO API across all major platforms.  
 _The project is still in its early stages, aiming to provide a robust and type-safe way to interact with API as per documentation https://docs.urlscan.io/apis/urlscan-openapi._
 
 ## 🚀 Features
