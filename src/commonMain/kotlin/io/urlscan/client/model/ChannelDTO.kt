@@ -36,7 +36,7 @@ data class Channel(
     val isDefault: Boolean = false,
     val ignoreTime: Boolean = false,
     val weekDays: List<String>? = null,
-    val permissions: List<String>? = null
+    val permissions: List<TeamPermission>? = null
 ) {
     init {
         require(type.isNotBlank()) { "Type cannot be blank" }

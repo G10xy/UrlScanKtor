@@ -10,7 +10,9 @@ import io.urlscan.client.model.SearchResponse
 class SearchApi internal constructor(
     private val httpClient: HttpClient,
     private val config: UrlScanConfig
-) {/**
+) {
+
+ /**
  * Search for historical scans, hostnames, domains, certificates, and incidents
  * @param q Search query using Elasticsearch Query String syntax
  * @param size Number of results to return (max 10000)

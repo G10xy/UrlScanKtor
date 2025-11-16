@@ -19,12 +19,6 @@ enum class Tlp {
     @SerialName("clear") CLEAR
 }
 
-@Serializable
-enum class TeamPermission {
-    @SerialName("team:read") TEAM_READ,
-    @SerialName("team:write") TEAM_WRITE
-}
-
 
 /**
  * Request wrapper for creating a saved search.
@@ -75,7 +69,7 @@ data class SavedSearchRequest(
     val tlp: Tlp? = null,
     @SerialName("usertags")
     val userTags: List<String>? = null,
-    val permissions: List<String>? = null
+    val permissions: List<TeamPermission>? = null
 ) {
     init {
         require(name.isNotBlank()) { "Name cannot be blank" }
@@ -125,24 +119,5 @@ data class SavedSearchResponse(
     val tlp: Tlp? = null,
     @SerialName("usertags")
     val userTags: List<String>? = null,
-    val permissions: List<String>? = null
-) {
-
-    /**
-     * Check if this search is publicly readable.
-     */
-    val isPublic: Boolean
-        get() = permissions?.contains("public:read") == true
-
-    /**
-     * Check if this search is team-accessible.
-     */
-    val isTeamAccessible: Boolean
-        get() = permissions?.any { it.contains("team:") } == true
-
-    /**
-     * Check if this search is private.
-     */
-    val isPrivate: Boolean
-        get() = permissions?.isEmpty() != false || permissions.all { !it.contains("public") && !it.contains("team") }
-}
+    val permissions: List<TeamPermission>? = null
+)

@@ -17,6 +17,7 @@ import io.urlscan.client.model.SavedSearchResponse
 import io.urlscan.client.model.SavedSearchResponseWrapper
 import io.urlscan.client.model.SavedSearchesListResponse
 import io.urlscan.client.model.SearchResponse
+import io.urlscan.client.model.TeamPermission
 
 class SavedSearchesApi internal constructor(
     private val httpClient: HttpClient,
@@ -146,28 +147,6 @@ class SavedSearchesApi internal constructor(
     suspend fun searchSavedSearchesByName(pattern: String): List<SavedSearchResponse> {
         return getSavedSearches().filter { search ->
             search.name.contains(pattern, ignoreCase = true)
-        }
-    }
-
-    /**
-     * Get all Saved Searches that have public read permission.
-     *
-     * @return List of publicly readable SavedSearchResponse
-     */
-    suspend fun getPublicSavedSearches(): List<SavedSearchResponse> {
-        return getSavedSearches().filter { search ->
-            search.permissions?.contains("public:read") == true
-        }
-    }
-
-    /**
-     * Get all Saved Searches that are team-accessible.
-     *
-     * @return List of team-accessible SavedSearchResponse
-     */
-    suspend fun getTeamSavedSearches(): List<SavedSearchResponse> {
-        return getSavedSearches().filter { search ->
-            search.permissions?.any { it.contains("team:") } == true
         }
     }
 }
