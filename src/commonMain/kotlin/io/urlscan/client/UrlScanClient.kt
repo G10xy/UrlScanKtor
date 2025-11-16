@@ -2,7 +2,6 @@ package io.urlscan.client
 
 import io.ktor.client.HttpClient
 import io.urlscan.client.internal.createPlatformHttpClient
-import io.urlscan.client.model.Incident
 
 /**
  * Main client for interacting with the urlscan.io API.
@@ -48,6 +47,10 @@ class UrlScanClient(
 
     val incidents: IncidentsApi by lazy {
         IncidentsApi(httpClient, config)
+    }
+
+    val files: FilesApi by lazy {
+        FilesApi(httpClient, config)
     }
 
 
