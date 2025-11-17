@@ -1,20 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
-val kotlinPluginVersion: String by project
-val androidGradlePluginVersion: String by project
-val ktorVersion: String by project
-val coroutinesVersion: String by project
-val serializationVersion: String by project
-val datetimeVersion: String by project
-val slf4jVersion: String by project
-val junitVersion: String by project
-val logbackVersion: String by project
-
 plugins {
-    kotlin("multiplatform") version kotlinPluginVersion
-    kotlin("plugin.serialization") version kotlinPluginVersion
-    id("com.android.library") version androidGradlePluginVersion
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.android.library)
     id("maven-publish")
 }
 
@@ -87,40 +77,40 @@ kotlin {
         // Common Source Set - Shared across ALL platforms
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                implementation("io.ktor:ktor-client-encoding:${ktorVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.client.serialization.json)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.encoding)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.datetime)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+                implementation(libs.ktor.client.mock)
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
 
         val jvmMain by getting {
             dependencies {
                 // OkHttp engine for JVM/Android
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.logging)
 
                 // Logging
-                implementation("org.slf4j:slf4j-api:$slf4jVersion")
+                implementation(libs.slf4j.api)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation("junit:junit:$junitVersion")
-                implementation("ch.qos.logback:logback-classic:$logbackVersion")
+                implementation(libs.junit)
+                implementation(libs.logback.classic)
             }
         }
 
@@ -133,7 +123,7 @@ kotlin {
         val iosMain by creating {
             dependsOn(commonMain)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+                implementation(libs.ktor.client.darwin)
             }
         }
 
@@ -170,7 +160,7 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 // Curl engine for native platforms
-                implementation("io.ktor:ktor-client-curl:$ktorVersion")
+                implementation(libs.ktor.client.curl)
             }
         }
 
@@ -197,7 +187,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 // JS engine for browser and Node.js
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation(libs.ktor.client.js)
             }
         }
 
