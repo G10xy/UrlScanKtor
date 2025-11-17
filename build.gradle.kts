@@ -1,20 +1,20 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
-val kotlinPluginVersion = "2.2.21"
-val androidGradlePluginVersion = "8.12.3"
-val ktorVersion = "3.3.2"
-val coroutinesVersion = "1.10.2"
-val serializationVersion = "1.7.3"
-val datetimeVersion = "0.6.1"
-val slf4jVersion = "2.0.9"
-val junitVersion = "4.13.2"
-val logbackVersion = "1.4.14"
+val kotlinPluginVersion: String by project
+val androidGradlePluginVersion: String by project
+val ktorVersion: String by project
+val coroutinesVersion: String by project
+val serializationVersion: String by project
+val datetimeVersion: String by project
+val slf4jVersion: String by project
+val junitVersion: String by project
+val logbackVersion: String by project
 
 plugins {
-    kotlin("multiplatform") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
-    id("com.android.library") version "8.12.3"
+    kotlin("multiplatform") version kotlinPluginVersion
+    kotlin("plugin.serialization") version kotlinPluginVersion
+    id("com.android.library") version androidGradlePluginVersion
     id("maven-publish")
 }
 
