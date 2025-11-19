@@ -2,9 +2,14 @@ package io.urlscan.client
 
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.serialization.kotlinx.json.json
+import io.urlscan.client.exception.ApiException
 import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
@@ -17,7 +22,6 @@ import io.urlscan.client.model.UrlscanVerdict
 import io.urlscan.client.model.Verdicts
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -109,7 +113,16 @@ class SearchApiTest {
                 headers = headersOf(HttpHeaders.ContentType, "application/json")
             )
         }
-    )
+    ) {
+        // ContentNegotiation to enable JSON deserialization
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+                ignoreUnknownKeys = true
+            })
+        }
+    }
 
     private fun createSearchApi(
         httpClient: io.ktor.client.HttpClient = createMockHttpClient(),
