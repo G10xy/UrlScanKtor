@@ -3,16 +3,15 @@ package io.urlscan.client
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import io.urlscan.client.exception.ApiException
 import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
+import io.urlscan.client.exception.installExceptionHandling
 import io.urlscan.client.model.Page
 import io.urlscan.client.model.SearchResponse
 import io.urlscan.client.model.SearchResult
@@ -104,17 +103,24 @@ class SearchApiTest {
      */
     private fun createMockHttpClient(
         statusCode: HttpStatusCode = HttpStatusCode.OK,
-        responseData: SearchResponse = createSearchResponse()
+        responseData: SearchResponse = createSearchResponse(),
+        errorContent: String? = null
     ) = io.ktor.client.HttpClient(
         MockEngine { request ->
+            val content = if (statusCode.value >= 400 && errorContent != null) {
+                errorContent
+            } else {
+                json.encodeToString(SearchResponse.serializer(), responseData)
+            }
+
             respond(
-                content = json.encodeToString(responseData),
+                content = content,
                 status = statusCode,
                 headers = headersOf(HttpHeaders.ContentType, "application/json")
             )
         }
     ) {
-        // ContentNegotiation to enable JSON deserialization
+        // Install ContentNegotiation to enable JSON deserialization
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
@@ -122,6 +128,8 @@ class SearchApiTest {
                 ignoreUnknownKeys = true
             })
         }
+
+        installExceptionHandling()
     }
 
     private fun createSearchApi(
@@ -352,14 +360,9 @@ class SearchApiTest {
 
     @Test
     fun testSearchAuthenticationError() = runTest {
-        val mockClient = io.ktor.client.HttpClient(
-            MockEngine { request ->
-                respond(
-                    content = """{"error": "Unauthorized"}""",
-                    status = HttpStatusCode.Unauthorized,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                )
-            }
+        val mockClient = createMockHttpClient(
+            statusCode = HttpStatusCode.Unauthorized,
+            errorContent = """{"error": "Unauthorized"}"""
         )
         val searchApi = createSearchApi(httpClient = mockClient)
 
@@ -370,14 +373,9 @@ class SearchApiTest {
 
     @Test
     fun testSearchForbiddenError() = runTest {
-        val mockClient = io.ktor.client.HttpClient(
-            MockEngine { request ->
-                respond(
-                    content = """{"error": "Forbidden"}""",
-                    status = HttpStatusCode.Forbidden,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                )
-            }
+        val mockClient = createMockHttpClient(
+            statusCode = HttpStatusCode.Forbidden,
+            errorContent = """{"error": "Forbidden"}"""
         )
         val searchApi = createSearchApi(httpClient = mockClient)
 
@@ -388,14 +386,9 @@ class SearchApiTest {
 
     @Test
     fun testSearchNotFoundError() = runTest {
-        val mockClient = io.ktor.client.HttpClient(
-            MockEngine { request ->
-                respond(
-                    content = """{"error": "Not Found"}""",
-                    status = HttpStatusCode.NotFound,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                )
-            }
+        val mockClient = createMockHttpClient(
+            statusCode = HttpStatusCode.NotFound,
+            errorContent = """{"error": "Not Found"}"""
         )
         val searchApi = createSearchApi(httpClient = mockClient)
 
@@ -412,11 +405,21 @@ class SearchApiTest {
                     content = """{"error": "Too Many Requests"}""",
                     status = HttpStatusCode.TooManyRequests,
                     headers = headersOf(
-                        "Retry-After", "60"
+                        HttpHeaders.ContentType to listOf("application/json"),
+                        "Retry-After" to listOf("60")
                     )
                 )
             }
-        )
+        ) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
+            }
+            installExceptionHandling()
+        }
         val searchApi = createSearchApi(httpClient = mockClient)
 
         val exception = assertFailsWith<RateLimitException> {
@@ -427,18 +430,13 @@ class SearchApiTest {
 
     @Test
     fun testSearchServerError() = runTest {
-        val mockClient = io.ktor.client.HttpClient(
-            MockEngine { request ->
-                respond(
-                    content = """{"error": "Internal Server Error"}""",
-                    status = HttpStatusCode.InternalServerError,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                )
-            }
+        val mockClient = createMockHttpClient(
+            statusCode = HttpStatusCode.InternalServerError,
+            errorContent = """{"error": "Internal Server Error"}"""
         )
         val searchApi = createSearchApi(httpClient = mockClient)
 
-        assertFailsWith<io.urlscan.client.exception.ApiException> {
+        assertFailsWith<ApiException> {
             searchApi.search("domain:example.com")
         }
     }
