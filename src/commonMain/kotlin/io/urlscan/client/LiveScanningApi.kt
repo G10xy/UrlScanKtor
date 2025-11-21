@@ -86,6 +86,11 @@ class LiveScanningApi internal constructor(
 
     /**
      * Get live scan resource as a String (for JSON/HTML/text content).
+     *
+     * @param scannerId ID of the scanner
+     * @param resourceType Type of resource to fetch
+     * @param resourceId ID of the resource to fetch
+     * @return String containing the resource data
      */
     suspend fun getLiveScanResourceAsString(
         scannerId: String,
@@ -105,6 +110,11 @@ class LiveScanningApi internal constructor(
 
     /**
      * Get live scan resource as ByteArray (for binary content).
+     *
+     * @param scannerId ID of the scanner
+     * @param resourceType Type of resource to fetch
+     * @param resourceId ID of the resource to fetch
+     * @return ByteArray containing the binary resource data
      */
     suspend fun getLiveScanResourceAsBinary(
         scannerId: String,
