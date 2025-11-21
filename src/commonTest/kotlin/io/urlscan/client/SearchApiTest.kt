@@ -107,10 +107,9 @@ class SearchApiTest {
         errorContent: String? = null
     ) = io.ktor.client.HttpClient(
         MockEngine { request ->
-            val content = if (statusCode.value >= 400 && errorContent != null) {
-                errorContent
-            } else {
-                json.encodeToString(SearchResponse.serializer(), responseData)
+            val content = when {
+               statusCode.value >= 400 && errorContent != null -> errorContent
+               else -> json.encodeToString(SearchResponse.serializer(), responseData)
             }
 
             respond(
@@ -339,7 +338,7 @@ class SearchApiTest {
         val results = listOf(
             createSearchResult(id = "scan-1", domain = "benign.com", malicious = false, country = "US"),
             createSearchResult(id = "scan-2", domain = "suspicious.com", malicious = true, country = "RU"),
-            createSearchResult(id = "scan-3", domain = "safe.com", malicious = false, country = "DE")
+            createSearchResult(id = "scan-3", domain = "safe.com", malicious = false, country = "IT")
         )
         val searchResponse = createSearchResponse(
             results = results,
@@ -472,7 +471,7 @@ class SearchApiTest {
         val mockClient = createMockHttpClient(responseData = searchResponse)
         val searchApi = createSearchApi(httpClient = mockClient)
 
-        val complexQuery = "domain:example.com AND country:US AND verdicts.urlscan.malicious:true"
+        val complexQuery = "domain:example.com AND country:IT AND verdicts.urlscan.malicious:true"
         val response = searchApi.search(q = complexQuery)
 
         assertEquals(1, response.total)
