@@ -2,8 +2,8 @@ package io.urlscan.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.accept
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsChannel
@@ -30,9 +30,6 @@ class ScanningApi internal constructor(
      */
     suspend fun submitScan(request: ScanRequest): ScanResponse {
         return httpClient.post("${config.baseUrl}/api/v1/scan") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
@@ -45,11 +42,7 @@ class ScanningApi internal constructor(
      * @return ScanResult containing comprehensive scan data
      */
     suspend fun getResult(scanId: String): ScanResult {
-        return httpClient.get("${config.baseUrl}/api/v1/result/$scanId/") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        return httpClient.get("${config.baseUrl}/api/v1/result/$scanId/").body()
     }
 
     /**
@@ -61,11 +54,8 @@ class ScanningApi internal constructor(
     suspend fun getScreenshot(scanId: String): ByteArray {
         return withContext(Dispatchers.Default) {
             val channel = httpClient.get("${config.baseUrl}/screenshots/$scanId.png") {
-                headers {
-                    append("API-Key", config.apiKey)
-                }
+                accept(ContentType.Image.PNG)
             }.bodyAsChannel()
-
             channel.toByteArray()
         }
     }
@@ -78,9 +68,7 @@ class ScanningApi internal constructor(
      */
     suspend fun getDom(scanId: String): String {
         return httpClient.get("${config.baseUrl}/dom/$scanId/") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
+            accept(ContentType.Text.Html)
         }.body()
     }
 
@@ -90,11 +78,7 @@ class ScanningApi internal constructor(
      * @return AvailableCountriesResponse containing list of country codes
      */
     suspend fun getAvailableCountries(): AvailableCountriesResponse {
-        return httpClient.get("${config.baseUrl}/api/v1/availableCountries") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        return httpClient.get("${config.baseUrl}/api/v1/availableCountries").body()
     }
 
     /**
@@ -103,10 +87,6 @@ class ScanningApi internal constructor(
      * @return UserAgentsResponse containing grouped user agent strings
      */
     suspend fun getUserAgents(): UserAgentsResponse {
-        return httpClient.get("${config.baseUrl}/api/v1/userAgents") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        return httpClient.get("${config.baseUrl}/api/v1/userAgents").body()
     }
 }

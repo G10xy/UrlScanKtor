@@ -140,6 +140,9 @@ actual fun createPlatformHttpClient(config: UrlScanConfig): HttpClient {
             url(config.baseUrl)
             header(HttpHeaders.Accept, HttpClientDefaults.Headers.ACCEPT_JSON)
             header(HttpHeaders.ContentType, HttpClientDefaults.Headers.CONTENT_TYPE_JSON)
+            if (config.apiKey.isNotBlank()) {
+                header(HttpClientDefaults.Headers.API_KEY_HEADER, config.apiKey)
+            }
             accept(ContentType.Application.Json)
         }
 

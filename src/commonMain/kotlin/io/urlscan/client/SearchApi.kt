@@ -3,7 +3,6 @@ package io.urlscan.client
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.urlscan.client.model.SearchResponse
 
@@ -27,9 +26,6 @@ suspend fun search(
     datasource: String? = null
 ): SearchResponse {
     return httpClient.get("${config.apiHost}/api/v1/search") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             parameter("q", q)
             size?.let { parameter("size", it) }
             searchAfter?.let { parameter("search_after", it) }
@@ -52,9 +48,6 @@ suspend fun search(
         searchAfter: String? = null
     ): SearchResponse {
         return httpClient.get("${config.apiHost}/api/v1/pro/result/$scanId/similar/") {
-                headers {
-                    append("API-Key", config.apiKey )
-                }
                 q?.let { parameter("q", it) }
                 size?.let { parameter("size", it) }
                 searchAfter?.let { parameter("search_after", it) }

@@ -4,7 +4,6 @@ package io.urlscan.client
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.urlscan.client.model.AvailableBrandsResponse
 import io.urlscan.client.model.Brand
 import io.urlscan.client.model.BrandStatistics
@@ -22,11 +21,7 @@ class BrandsApi internal constructor(
     suspend fun getAvailableBrands(): List<Brand> {
         val response = httpClient.get(
             "${config.apiHost}/api/v1/pro/availableBrands"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body<AvailableBrandsResponse>()
+        ).body<AvailableBrandsResponse>()
         return response.kits
     }
 
@@ -38,11 +33,7 @@ class BrandsApi internal constructor(
     suspend fun getBrandSummaries(): List<BrandSummary> {
         return httpClient.get(
             "${config.apiHost}/api/v1/pro/brands"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body<List<BrandSummary>>()
+        ).body<List<BrandSummary>>()
     }
 
     /**

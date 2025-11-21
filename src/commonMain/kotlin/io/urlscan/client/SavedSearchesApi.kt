@@ -4,7 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -17,7 +16,6 @@ import io.urlscan.client.model.SavedSearchResponse
 import io.urlscan.client.model.SavedSearchResponseWrapper
 import io.urlscan.client.model.SavedSearchesListResponse
 import io.urlscan.client.model.SearchResponse
-import io.urlscan.client.model.TeamPermission
 
 class SavedSearchesApi internal constructor(
     private val httpClient: HttpClient,
@@ -31,11 +29,7 @@ class SavedSearchesApi internal constructor(
     suspend fun getSavedSearches(): List<SavedSearchResponse> {
         val response: SavedSearchesListResponse = httpClient.get(
             "${config.apiHost}/api/v1/user/searches/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        ).body()
         return response.searches
     }
 
@@ -51,9 +45,6 @@ class SavedSearchesApi internal constructor(
         val response: SavedSearchResponseWrapper = httpClient.post(
             "${config.apiHost}/api/v1/user/searches/"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(wrapper)
         }.body()
@@ -75,9 +66,6 @@ class SavedSearchesApi internal constructor(
         val response: SavedSearchResponseWrapper = httpClient.put(
             "${config.apiHost}/api/v1/user/searches/$searchId/"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(wrapper)
         }.body()
@@ -91,11 +79,7 @@ class SavedSearchesApi internal constructor(
     suspend fun deleteSavedSearch(searchId: String) {
         httpClient.delete(
             "${config.apiHost}/api/v1/user/searches/$searchId/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }
+        )
     }
 
     /**
@@ -108,11 +92,7 @@ class SavedSearchesApi internal constructor(
     suspend fun getSavedSearchResults(searchId: String): SearchResponse {
         return httpClient.get(
             "${config.apiHost}/api/v1/user/searches/$searchId/results/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        ).body()
     }
 
     /**

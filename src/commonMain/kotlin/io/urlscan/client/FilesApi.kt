@@ -1,10 +1,11 @@
 package io.urlscan.client
 
 import io.ktor.client.HttpClient
+import io.ktor.client.request.accept
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsChannel
+import io.ktor.http.ContentType
 import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -43,11 +44,9 @@ class FilesApi internal constructor(
             val channel = httpClient.get(
                 "${config.apiHost}/downloads/$fileHash"
             ) {
-                headers {
-                    append("API-Key", config.apiKey)
-                }
                 parameter("password", password)
                 filename?.let { parameter("filename", it) }
+                accept(ContentType.Application.Zip)
             }.bodyAsChannel()
 
             channel.toByteArray()

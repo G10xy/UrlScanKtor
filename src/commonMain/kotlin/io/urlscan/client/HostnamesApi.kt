@@ -3,7 +3,6 @@ package io.urlscan.client
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.urlscan.client.model.HostnameHistorySchema
 
@@ -29,9 +28,6 @@ class HostnamesApi internal constructor(
         require(limit in 10..10000) { "Limit must be between 10 and 10000" }
 
         return httpClient.get("${config.apiHost}/api/v1/hostname/$hostname") {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             parameter("limit", limit)
             pageState?.let { parameter("pageState", it) }
         }.body()

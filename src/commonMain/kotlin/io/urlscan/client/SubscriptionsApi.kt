@@ -4,7 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -29,11 +28,7 @@ class SubscriptionsApi internal constructor(
     suspend fun getSubscriptions(): List<Subscription> {
         return httpClient.get(
             "${config.apiHost}/api/v1/user/subscriptions/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body<List<Subscription>>()
+        ).body<List<Subscription>>()
     }
 
     /**
@@ -48,9 +43,6 @@ class SubscriptionsApi internal constructor(
         val response = httpClient.post(
             "${config.apiHost}/api/v1/user/subscriptions/"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<SubscriptionResponse>()
@@ -72,9 +64,6 @@ class SubscriptionsApi internal constructor(
         val response = httpClient.put(
             "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<SubscriptionResponse>()
@@ -89,11 +78,7 @@ class SubscriptionsApi internal constructor(
     suspend fun deleteSubscription(subscriptionId: String) {
         httpClient.delete(
             "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }
+        )
     }
 
     /**
@@ -110,11 +95,7 @@ class SubscriptionsApi internal constructor(
     ): String {
         return httpClient.get(
             "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/results/$datasource/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body()
+        ).body()
     }
 
     /**

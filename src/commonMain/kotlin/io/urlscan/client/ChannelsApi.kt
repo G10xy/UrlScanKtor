@@ -3,7 +3,6 @@ package io.urlscan.client
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -28,11 +27,7 @@ class ChannelsApi internal constructor(
     suspend fun getChannels(): List<Channel> {
         val response = httpClient.get(
             "${config.apiHost}/api/v1/user/channels/"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body<ChannelsListResponse>()
+        ).body<ChannelsListResponse>()
         return response.channels
     }
 
@@ -48,9 +43,6 @@ class ChannelsApi internal constructor(
         val response = httpClient.post(
             "${config.apiHost}/api/v1/user/channels/"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<ChannelResponse>()
@@ -66,11 +58,7 @@ class ChannelsApi internal constructor(
     suspend fun getChannelById(channelId: String): Channel {
         val response = httpClient.get(
             "${config.apiHost}/api/v1/user/channels/$channelId"
-        ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
-        }.body<ChannelResponse>()
+        ).body<ChannelResponse>()
         return response.channel
     }
 
@@ -89,9 +77,6 @@ class ChannelsApi internal constructor(
         val response = httpClient.put(
             "${config.apiHost}/api/v1/user/channels/$channelId"
         ) {
-            headers {
-                append("API-Key", config.apiKey)
-            }
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<ChannelResponse>()
