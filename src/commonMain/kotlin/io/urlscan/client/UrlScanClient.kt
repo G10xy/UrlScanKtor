@@ -57,7 +57,6 @@ class UrlScanClient(
 
     /**
      * Close the HTTP client and release resources.
-     * Should be called when the client is no longer needed.
      */
     fun close() {
         httpClient.close()
