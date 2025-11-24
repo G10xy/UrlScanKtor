@@ -13,21 +13,21 @@ import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
 import io.urlscan.client.exception.installExceptionHandling
+import io.urlscan.client.model.CommunityVerdicts
+import io.urlscan.client.model.EngineVerdicts
+import io.urlscan.client.model.ScanData
+import io.urlscan.client.model.ScanLists
+import io.urlscan.client.model.ScanMeta
+import io.urlscan.client.model.ScanPage
 import io.urlscan.client.model.ScanRequest
 import io.urlscan.client.model.ScanResponse
 import io.urlscan.client.model.ScanResult
-import io.urlscan.client.model.ScanData
 import io.urlscan.client.model.ScanStats
-import io.urlscan.client.model.ScanMeta
 import io.urlscan.client.model.ScanTask
-import io.urlscan.client.model.ScanPage
-import io.urlscan.client.model.ScanLists
 import io.urlscan.client.model.ScanVerdicts
-import io.urlscan.client.model.VerdictDetails
-import io.urlscan.client.model.EngineVerdicts
-import io.urlscan.client.model.CommunityVerdicts
-import io.urlscan.client.model.UserAgentsResponse
 import io.urlscan.client.model.UserAgentGroup
+import io.urlscan.client.model.UserAgentsResponse
+import io.urlscan.client.model.VerdictDetails
 import io.urlscan.client.model.Visibility
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.InternalSerializationApi
@@ -35,9 +35,9 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.test.assertFalse
 
 class ScanningApiTest {
 

@@ -386,7 +386,6 @@ class HostnamesApiTest {
         val mockClient = createMockHttpClient(responseData = schema)
         val hostnamesApi = createHostnamesApi(httpClient = mockClient)
 
-        // Should not throw - 10 is valid
         hostnamesApi.getHostnameHistory("example.com", limit = 10)
     }
 

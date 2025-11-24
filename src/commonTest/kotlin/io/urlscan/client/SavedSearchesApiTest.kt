@@ -13,6 +13,7 @@ import io.urlscan.client.exception.AuthenticationException
 import io.urlscan.client.exception.NotFoundException
 import io.urlscan.client.exception.RateLimitException
 import io.urlscan.client.exception.installExceptionHandling
+import io.urlscan.client.model.Page
 import io.urlscan.client.model.SavedSearchDatasource
 import io.urlscan.client.model.SavedSearchRequest
 import io.urlscan.client.model.SavedSearchResponse
@@ -20,9 +21,8 @@ import io.urlscan.client.model.SavedSearchResponseWrapper
 import io.urlscan.client.model.SavedSearchesListResponse
 import io.urlscan.client.model.SearchResponse
 import io.urlscan.client.model.SearchResult
-import io.urlscan.client.model.Task
-import io.urlscan.client.model.Page
 import io.urlscan.client.model.Stats
+import io.urlscan.client.model.Task
 import io.urlscan.client.model.TeamPermission
 import io.urlscan.client.model.Tlp
 import kotlinx.coroutines.test.runTest
