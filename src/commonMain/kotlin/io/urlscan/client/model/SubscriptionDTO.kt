@@ -70,7 +70,7 @@ data class Subscription(
     val description: String? = null,
     val isActive: Boolean,
     val ignoreTime: Boolean,
-    val weekDays: List<String>? = null,
+    val weekDays: List<WeekDay>? = null,
     val permissions: List<TeamPermission>? = null,
     val channelIds: List<String>? = null,
     val incidentChannelIds: List<String>? = null,
