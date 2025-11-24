@@ -35,7 +35,7 @@ data class Channel(
     val isActive: Boolean = true,
     val isDefault: Boolean = false,
     val ignoreTime: Boolean = false,
-    val weekDays: List<String>? = null,
+    val weekDays: List<WeekDay>? = null,
     val permissions: List<TeamPermission>? = null
 ) {
     init {
