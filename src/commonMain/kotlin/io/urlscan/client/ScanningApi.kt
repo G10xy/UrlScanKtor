@@ -10,7 +10,6 @@ import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.utils.io.toByteArray
-import io.urlscan.client.model.AvailableCountriesResponse
 import io.urlscan.client.model.ScanRequest
 import io.urlscan.client.model.ScanResponse
 import io.urlscan.client.model.ScanResult
@@ -77,7 +76,7 @@ class ScanningApi internal constructor(
      *
      * @return AvailableCountriesResponse containing list of country codes
      */
-    suspend fun getAvailableCountries(): AvailableCountriesResponse {
+    suspend fun getAvailableCountries(): List<String> {
         return httpClient.get("${config.baseUrl}/api/v1/availableCountries").body()
     }
 

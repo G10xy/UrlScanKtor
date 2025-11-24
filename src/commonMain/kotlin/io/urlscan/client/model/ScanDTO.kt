@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
-// BASIC SCAN MODELS (Request/Response)
 
 @Serializable
 data class ScanRequest(
@@ -24,11 +23,6 @@ data class ScanResponse(
     val visibility: String,
     val url: String,
     val country: String
-)
-
-@Serializable
-data class AvailableCountriesResponse(
-    val countries: List<String>
 )
 
 @Serializable
@@ -58,7 +52,7 @@ data class ScanResult(
 
 @Serializable
 data class ScanData(
-    val requests: List<ScanRequest_> = emptyList(),
+    val requests: List<ScanRequestData> = emptyList(),
     val cookies: List<JsonObject> = emptyList(),
     val console: List<ConsoleMessage> = emptyList(),
     val links: List<Link> = emptyList(),
@@ -67,7 +61,7 @@ data class ScanData(
 )
 
 @Serializable
-data class ScanRequest_(
+data class ScanRequestData(
     val request: RequestDetails,
     val response: ResponseDetails? = null,
     val initiatorInfo: InitiatorInfo? = null
@@ -177,7 +171,6 @@ data class Link(
     val text: String
 )
 
-// STATISTICS MODELS
 
 @Serializable
 data class ScanStats(
@@ -299,7 +292,6 @@ data class IpStat(
     val rdns: RdnsInfo? = null
 )
 
-// NETWORK INFO MODELS
 
 @Serializable
 data class RdnsInfo(
@@ -307,7 +299,6 @@ data class RdnsInfo(
     val ptr: String
 )
 
-// METADATA MODELS
 
 @Serializable
 data class ScanMeta(
@@ -414,7 +405,6 @@ data class ScanPage(
     val ptr: String? = null
 )
 
-// LISTS AND CERTIFICATES
 
 @Serializable
 data class ScanLists(
@@ -437,7 +427,6 @@ data class Certificate(
     val validTo: Long
 )
 
-// VERDICT MODELS
 
 @Serializable
 data class ScanVerdicts(
