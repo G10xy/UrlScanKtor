@@ -10,6 +10,7 @@ import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -70,16 +71,18 @@ class FilesApi internal constructor(
         concurrency: Int = 10
     ): Map<String, Result<ByteArray>> = supervisorScope {
         val semaphore = Semaphore(concurrency)
-        val deferred = fileHashes.map { hash ->
+        fileHashes.map { hash ->
             async(Dispatchers.Default) {
                 semaphore.withPermit {
-                    runCatching { downloadFile(hash, password, filename) }.fold(
+                    ensureActive()
+                    runCatching {
+                        downloadFile(hash, password, filename)
+                    }.fold(
                         onSuccess = { hash to Result.success(it) },
                         onFailure = { hash to Result.failure(it) }
                     )
                 }
             }
-        }
-        deferred.awaitAll().toMap()
+        }.awaitAll().toMap()
     }
 }
