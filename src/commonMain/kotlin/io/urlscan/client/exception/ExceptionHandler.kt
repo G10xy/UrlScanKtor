@@ -75,7 +75,8 @@ internal fun <T> T.installExceptionHandling() where T : io.ktor.client.HttpClien
                     throw ApiException(
                         statusCode = 0,
                         message = "Connection timeout while connecting to ${request.url.host}. " +
-                                "Check your network connection or try again later."
+                                "Check your network connection or try again later.",
+                        cause = exception
                     )
                 }
 
@@ -83,7 +84,8 @@ internal fun <T> T.installExceptionHandling() where T : io.ktor.client.HttpClien
                     throw ApiException(
                         statusCode = 0,
                         message = "Request timeout for $method $url. " +
-                                "The request took too long to complete."
+                                "The request took too long to complete.",
+                        cause = exception
                     )
                 }
 
@@ -91,28 +93,32 @@ internal fun <T> T.installExceptionHandling() where T : io.ktor.client.HttpClien
                     throw ApiException(
                         statusCode = 0,
                         message = "Request timeout for $method $url. " +
-                                "The operation exceeded the maximum allowed time."
+                                "The operation exceeded the maximum allowed time.",
+                        cause = exception
                     )
                 }
 
                 is IOException -> {
                     throw ApiException(
                         statusCode = 0,
-                        message = "Network error while calling $method $url: ${exception.message}"
+                        message = "Network error while calling $method $url",
+                        cause = exception
                     )
                 }
 
                 is ResponseException -> {
                     throw ApiException(
                         statusCode = exception.response.status.value,
-                        message = "HTTP error (${exception.response.status.value}) for $method $url"
+                        message = "HTTP error (${exception.response.status.value}) for $method $url",
+                        cause = exception
                     )
                 }
 
                 else -> {
                     throw ApiException(
                         statusCode = 0,
-                        message = "Unexpected error for $method $url: ${exception::class.simpleName} - ${exception.message}"
+                        message = "Unexpected error for $method $url: ${exception::class.simpleName}",
+                        cause = exception
                     )
                 }
             }

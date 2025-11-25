@@ -44,6 +44,7 @@ class RateLimitException(
 @Serializable
 class ApiException(
     val statusCode: Int,
-    override val message: String
-) : UrlScanException(message)
+    override val message: String,
+    @Transient override val cause: Throwable? = null
+) : UrlScanException(message, cause)
 
