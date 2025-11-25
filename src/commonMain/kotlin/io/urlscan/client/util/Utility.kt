@@ -7,4 +7,6 @@ object Utility {
         return List(length) { charPool.random() }.joinToString("")
     }
 
+    val SHA256_REGEX = Regex("^[a-fA-F0-9]{64}$")
+
 }

@@ -8,6 +8,7 @@ import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
 import io.ktor.utils.io.toByteArray
+import io.urlscan.client.util.Utility.SHA256_REGEX
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -40,6 +41,7 @@ class FilesApi internal constructor(
     ): ByteArray {
         require(fileHash.isNotBlank()) { "File hash cannot be blank" }
         require(fileHash.length == 64) { "SHA256 hash must be 64 characters long" }
+        require(SHA256_REGEX.matches(fileHash)) { "Invalid SHA256 hash format. Must be 64 hexadecimal characters." }
         require(password.isNotBlank()) { "Password cannot be blank" }
 
         return withContext(Dispatchers.Default) {
