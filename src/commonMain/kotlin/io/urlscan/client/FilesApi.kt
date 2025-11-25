@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
 import io.ktor.utils.io.toByteArray
@@ -42,15 +43,13 @@ class FilesApi internal constructor(
         require(password.isNotBlank()) { "Password cannot be blank" }
 
         return withContext(Dispatchers.Default) {
-            val channel = httpClient.get(
-                "${config.baseUrl}/downloads/$fileHash"
-            ) {
+            httpClient.prepareGet("${config.apiHost}/downloads/$fileHash") {
                 parameter("password", password)
                 filename?.let { parameter("filename", it) }
                 accept(ContentType.Application.Zip)
-            }.bodyAsChannel()
-
-            channel.toByteArray()
+            }.execute { response ->
+                response.bodyAsChannel().toByteArray()
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.prepareGet
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
@@ -52,10 +53,11 @@ class ScanningApi internal constructor(
      */
     suspend fun getScreenshot(scanId: String): ByteArray {
         return withContext(Dispatchers.Default) {
-            val channel = httpClient.get("${config.baseUrl}/screenshots/$scanId.png") {
+            httpClient.prepareGet("${config.baseUrl}/screenshots/$scanId.png") {
                 accept(ContentType.Image.PNG)
-            }.bodyAsChannel()
-            channel.toByteArray()
+            }.execute { response ->
+                response.bodyAsChannel().toByteArray()
+            }
         }
     }
 
