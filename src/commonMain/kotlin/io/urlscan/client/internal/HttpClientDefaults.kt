@@ -65,7 +65,7 @@ internal object HttpClientDefaults {
     }
 
     object Logging {
-        val SANITIZED_HEADERS = setOf("api-Key")
+        val SANITIZED_HEADERS = setOf("API-Key", "Authorization", "Cookie", "Set-Cookie")
         const val LOG_LEVEL_ALL = true
         const val FILTER_URLSCAN_ONLY = true
     }
