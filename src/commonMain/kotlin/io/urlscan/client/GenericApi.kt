@@ -11,10 +11,10 @@ class GenericApi internal constructor(
     private val config: UrlScanConfig
 ) {
     suspend fun getQuotas(): QuotasResponse {
-        return httpClient.get("${config.apiHost}/api/v1/quotas").body()
+        return httpClient.get("${config.baseUrl}/api/v1/quotas").body()
     }
 
     suspend fun getProUsername(): ProUsernameResponse {
-        return httpClient.get("${config.apiHost}/api/v1/pro/username").body()
+        return httpClient.get("${config.baseUrl}/api/v1/pro/username").body()
     }
 }

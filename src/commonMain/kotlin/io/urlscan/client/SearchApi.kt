@@ -25,7 +25,7 @@ suspend fun search(
     searchAfter: String? = null,
     datasource: String? = null
 ): SearchResponse {
-    return httpClient.get("${config.apiHost}/api/v1/search") {
+    return httpClient.get("${config.baseUrl}/api/v1/search") {
             parameter("q", q)
             size?.let { parameter("size", it) }
             searchAfter?.let { parameter("search_after", it) }
@@ -47,7 +47,7 @@ suspend fun search(
         size: Int? = null,
         searchAfter: String? = null
     ): SearchResponse {
-        return httpClient.get("${config.apiHost}/api/v1/pro/result/$scanId/similar/") {
+        return httpClient.get("${config.baseUrl}/api/v1/pro/result/$scanId/similar/") {
                 q?.let { parameter("q", it) }
                 size?.let { parameter("size", it) }
                 searchAfter?.let { parameter("search_after", it) }

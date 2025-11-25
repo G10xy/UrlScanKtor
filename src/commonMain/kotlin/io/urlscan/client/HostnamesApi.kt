@@ -27,7 +27,7 @@ class HostnamesApi internal constructor(
         require(hostname.isNotBlank()) { "Hostname cannot be blank" }
         require(limit in 10..10000) { "Limit must be between 10 and 10000" }
 
-        return httpClient.get("${config.apiHost}/api/v1/hostname/$hostname") {
+        return httpClient.get("${config.baseUrl}/api/v1/hostname/$hostname") {
             parameter("limit", limit)
             pageState?.let { parameter("pageState", it) }
         }.body()

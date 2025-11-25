@@ -27,7 +27,7 @@ class SubscriptionsApi internal constructor(
      */
     suspend fun getSubscriptions(): List<Subscription> {
         return httpClient.get(
-            "${config.apiHost}/api/v1/user/subscriptions/"
+            "${config.baseUrl}/api/v1/user/subscriptions/"
         ).body<List<Subscription>>()
     }
 
@@ -41,7 +41,7 @@ class SubscriptionsApi internal constructor(
     suspend fun createSubscription(subscription: Subscription): Subscription {
         val request = SubscriptionRequest(subscription = subscription)
         val response = httpClient.post(
-            "${config.apiHost}/api/v1/user/subscriptions/"
+            "${config.baseUrl}/api/v1/user/subscriptions/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(request)
@@ -62,7 +62,7 @@ class SubscriptionsApi internal constructor(
     ): Subscription {
         val request = SubscriptionRequest(subscription = subscription)
         val response = httpClient.put(
-            "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/"
+            "${config.baseUrl}/api/v1/user/subscriptions/$subscriptionId/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(request)
@@ -77,7 +77,7 @@ class SubscriptionsApi internal constructor(
      */
     suspend fun deleteSubscription(subscriptionId: String) {
         httpClient.delete(
-            "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/"
+            "${config.baseUrl}/api/v1/user/subscriptions/$subscriptionId/"
         )
     }
 
@@ -94,7 +94,7 @@ class SubscriptionsApi internal constructor(
         datasource: String
     ): String {
         return httpClient.get(
-            "${config.apiHost}/api/v1/user/subscriptions/$subscriptionId/results/$datasource/"
+            "${config.baseUrl}/api/v1/user/subscriptions/$subscriptionId/results/$datasource/"
         ).body()
     }
 

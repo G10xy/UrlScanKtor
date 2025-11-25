@@ -43,7 +43,7 @@ class FilesApi internal constructor(
 
         return withContext(Dispatchers.Default) {
             val channel = httpClient.get(
-                "${config.apiHost}/downloads/$fileHash"
+                "${config.baseUrl}/downloads/$fileHash"
             ) {
                 parameter("password", password)
                 filename?.let { parameter("filename", it) }

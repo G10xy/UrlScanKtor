@@ -20,7 +20,7 @@ class BrandsApi internal constructor(
      */
     suspend fun getAvailableBrands(): List<Brand> {
         val response = httpClient.get(
-            "${config.apiHost}/api/v1/pro/availableBrands"
+            "${config.baseUrl}/api/v1/pro/availableBrands"
         ).body<AvailableBrandsResponse>()
         return response.kits
     }
@@ -32,7 +32,7 @@ class BrandsApi internal constructor(
      */
     suspend fun getBrandSummaries(): List<BrandSummary> {
         return httpClient.get(
-            "${config.apiHost}/api/v1/pro/brands"
+            "${config.baseUrl}/api/v1/pro/brands"
         ).body<List<BrandSummary>>()
     }
 

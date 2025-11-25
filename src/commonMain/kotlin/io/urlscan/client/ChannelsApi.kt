@@ -26,7 +26,7 @@ class ChannelsApi internal constructor(
      */
     suspend fun getChannels(): List<Channel> {
         val response = httpClient.get(
-            "${config.apiHost}/api/v1/user/channels/"
+            "${config.baseUrl}/api/v1/user/channels/"
         ).body<ChannelsListResponse>()
         return response.channels
     }
@@ -41,7 +41,7 @@ class ChannelsApi internal constructor(
     suspend fun createChannel(channel: Channel): Channel {
         val request = ChannelRequest(channel = channel)
         val response = httpClient.post(
-            "${config.apiHost}/api/v1/user/channels/"
+            "${config.baseUrl}/api/v1/user/channels/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(request)
@@ -57,7 +57,7 @@ class ChannelsApi internal constructor(
      */
     suspend fun getChannelById(channelId: String): Channel {
         val response = httpClient.get(
-            "${config.apiHost}/api/v1/user/channels/$channelId"
+            "${config.baseUrl}/api/v1/user/channels/$channelId"
         ).body<ChannelResponse>()
         return response.channel
     }
@@ -75,7 +75,7 @@ class ChannelsApi internal constructor(
     ): Channel {
         val request = ChannelRequest(channel = channel)
         val response = httpClient.put(
-            "${config.apiHost}/api/v1/user/channels/$channelId"
+            "${config.baseUrl}/api/v1/user/channels/$channelId"
         ) {
             contentType(ContentType.Application.Json)
             setBody(request)

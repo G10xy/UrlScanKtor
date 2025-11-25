@@ -46,7 +46,7 @@ class LiveScanningApi internal constructor(
      * @return List of available scanner information
      */
     suspend fun getLiveScanners(): List<LiveScannerInfo> {
-        return httpClient.get("${config.apiHost}/api/v1/livescan/scanners/").body()
+        return httpClient.get("${config.baseUrl}/api/v1/livescan/scanners/").body()
     }
 
     /**
@@ -61,7 +61,7 @@ class LiveScanningApi internal constructor(
         scannerId: String,
         request: LiveScanRequest
     ): LiveScanResponse {
-        return httpClient.post("${config.apiHost}/api/v1/livescan/$scannerId/task/") {
+        return httpClient.post("${config.baseUrl}/api/v1/livescan/$scannerId/task/") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
@@ -78,7 +78,7 @@ class LiveScanningApi internal constructor(
         scannerId: String,
         request: LiveScanRequest
     ): LiveScanResponse {
-        return httpClient.post("${config.apiHost}/api/v1/livescan/$scannerId/scan/") {
+        return httpClient.post("${config.baseUrl}/api/v1/livescan/$scannerId/scan/") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
@@ -102,7 +102,7 @@ class LiveScanningApi internal constructor(
         }
 
         return httpClient.get(
-            "${config.apiHost}/api/v1/livescan/$scannerId/${resourceType.path}/$resourceId"
+            "${config.baseUrl}/api/v1/livescan/$scannerId/${resourceType.path}/$resourceId"
         ) {
             accept(resourceType.contentType)
         }.body()
@@ -127,7 +127,7 @@ class LiveScanningApi internal constructor(
 
         return withContext(Dispatchers.Default) {
             val channel = httpClient.get(
-                "${config.apiHost}/api/v1/livescan/$scannerId/${resourceType.path}/$resourceId"
+                "${config.baseUrl}/api/v1/livescan/$scannerId/${resourceType.path}/$resourceId"
             ) {
                 accept(resourceType.contentType)
             }.bodyAsChannel()
@@ -151,7 +151,7 @@ class LiveScanningApi internal constructor(
         visibility: Visibility
     ): String {
         return httpClient.put(
-            "${config.apiHost}/api/v1/livescan/$scannerId/$scanId/"
+            "${config.baseUrl}/api/v1/livescan/$scannerId/$scanId/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(LiveScanStoreRequest(visibility))
@@ -171,7 +171,7 @@ class LiveScanningApi internal constructor(
         scanId: String
     ): String {
         return httpClient.delete(
-            "${config.apiHost}/api/v1/livescan/$scannerId/$scanId/"
+            "${config.baseUrl}/api/v1/livescan/$scannerId/$scanId/"
         ).body()
     }
 }

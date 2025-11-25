@@ -28,7 +28,7 @@ class SavedSearchesApi internal constructor(
      */
     suspend fun getSavedSearches(): List<SavedSearchResponse> {
         val response: SavedSearchesListResponse = httpClient.get(
-            "${config.apiHost}/api/v1/user/searches/"
+            "${config.baseUrl}/api/v1/user/searches/"
         ).body()
         return response.searches
     }
@@ -43,7 +43,7 @@ class SavedSearchesApi internal constructor(
     suspend fun createSavedSearch(request: SavedSearchRequest): SavedSearchResponse {
         val wrapper = SavedSearchRequestWrapper(search = request)
         val response: SavedSearchResponseWrapper = httpClient.post(
-            "${config.apiHost}/api/v1/user/searches/"
+            "${config.baseUrl}/api/v1/user/searches/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(wrapper)
@@ -64,7 +64,7 @@ class SavedSearchesApi internal constructor(
     ): SavedSearchResponse {
         val wrapper = SavedSearchRequestWrapper(search = request)
         val response: SavedSearchResponseWrapper = httpClient.put(
-            "${config.apiHost}/api/v1/user/searches/$searchId/"
+            "${config.baseUrl}/api/v1/user/searches/$searchId/"
         ) {
             contentType(ContentType.Application.Json)
             setBody(wrapper)
@@ -78,7 +78,7 @@ class SavedSearchesApi internal constructor(
      */
     suspend fun deleteSavedSearch(searchId: String) {
         httpClient.delete(
-            "${config.apiHost}/api/v1/user/searches/$searchId/"
+            "${config.baseUrl}/api/v1/user/searches/$searchId/"
         )
     }
 
@@ -91,7 +91,7 @@ class SavedSearchesApi internal constructor(
      */
     suspend fun getSavedSearchResults(searchId: String): SearchResponse {
         return httpClient.get(
-            "${config.apiHost}/api/v1/user/searches/$searchId/results/"
+            "${config.baseUrl}/api/v1/user/searches/$searchId/results/"
         ).body()
     }
 

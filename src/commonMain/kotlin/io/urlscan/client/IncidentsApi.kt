@@ -28,7 +28,7 @@ class IncidentsApi internal constructor(
      */
     suspend fun createIncident(incident: Incident): Incident {
         val request = IncidentRequest(incident = incident)
-        val response = httpClient.post("${config.apiHost}/api/v1/user/incidents") {
+        val response = httpClient.post("${config.baseUrl}/api/v1/user/incidents") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<IncidentResponse>()
@@ -42,7 +42,7 @@ class IncidentsApi internal constructor(
      * @return Incident containing the incident details
      */
     suspend fun getIncident(incidentId: String): Incident {
-        val response = httpClient.get("${config.apiHost}/api/v1/user/incidents/$incidentId").body<IncidentResponse>()
+        val response = httpClient.get("${config.baseUrl}/api/v1/user/incidents/$incidentId").body<IncidentResponse>()
         return response.incident
     }
 
@@ -59,7 +59,7 @@ class IncidentsApi internal constructor(
         incident: Incident
     ): Incident {
         val request = IncidentRequest(incident = incident)
-        val response = httpClient.put("${config.apiHost}/api/v1/user/incidents/$incidentId") {
+        val response = httpClient.put("${config.baseUrl}/api/v1/user/incidents/$incidentId") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<IncidentResponse>()
@@ -74,7 +74,7 @@ class IncidentsApi internal constructor(
      * @return Incident containing the closed incident with state set to "closed"
      */
     suspend fun closeIncident(incidentId: String): Incident {
-        val response = httpClient.put("${config.apiHost}/api/v1/user/incidents/$incidentId/close") {
+        val response = httpClient.put("${config.baseUrl}/api/v1/user/incidents/$incidentId/close") {
             contentType(ContentType.Application.Json)
             setBody(emptyMap<String, String>())
         }.body<IncidentResponse>()
@@ -91,7 +91,7 @@ class IncidentsApi internal constructor(
      * @return Incident containing the restarted incident with state set to "active"
      */
     suspend fun restartIncident(incidentId: String): Incident {
-        val response = httpClient.put("${config.apiHost}/api/v1/user/incidents/$incidentId/restart") {
+        val response = httpClient.put("${config.baseUrl}/api/v1/user/incidents/$incidentId/restart") {
             contentType(ContentType.Application.Json)
             setBody(emptyMap<String, String>())
         }.body<IncidentResponse>()
@@ -107,7 +107,7 @@ class IncidentsApi internal constructor(
      * @return Incident containing the newly created copy
      */
     suspend fun copyIncident(incidentId: String): Incident {
-        val response = httpClient.post("${config.apiHost}/api/v1/user/incidents/$incidentId/copy") {
+        val response = httpClient.post("${config.baseUrl}/api/v1/user/incidents/$incidentId/copy") {
             contentType(ContentType.Application.Json)
             setBody(emptyMap<String, String>())
         }.body<IncidentResponse>()
@@ -123,7 +123,7 @@ class IncidentsApi internal constructor(
      * @return Incident containing the newly created fork with history
      */
     suspend fun forkIncident(incidentId: String): Incident {
-        val response = httpClient.post("${config.apiHost}/api/v1/user/incidents/$incidentId/fork") {
+        val response = httpClient.post("${config.baseUrl}/api/v1/user/incidents/$incidentId/fork") {
             contentType(ContentType.Application.Json)
             setBody(emptyMap<String, String>())
         }.body<IncidentResponse>()
@@ -138,7 +138,7 @@ class IncidentsApi internal constructor(
      */
     suspend fun getWatchableAttributes(): List<String> {
         return httpClient.get(
-            "${config.apiHost}/api/v1/user/watchableAttributes"
+            "${config.baseUrl}/api/v1/user/watchableAttributes"
         ).body<WatchableAttributesResponse>()
             .attributes
     }
@@ -152,7 +152,7 @@ class IncidentsApi internal constructor(
      */
     suspend fun getIncidentStates(incidentId: String): List<IncidentState> {
         val response = httpClient.get(
-            "${config.apiHost}/api/v1/user/incidentstates/$incidentId/"
+            "${config.baseUrl}/api/v1/user/incidentstates/$incidentId/"
         ).body<IncidentStatesResponse>()
         return response.incidentstates
     }
