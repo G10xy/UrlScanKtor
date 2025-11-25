@@ -1,7 +1,10 @@
 package io.urlscan.client
 
 import io.ktor.client.HttpClient
+import io.ktor.utils.io.core.Closeable
 import io.urlscan.client.internal.createPlatformHttpClient
+import kotlin.concurrent.atomics.AtomicBoolean
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 /**
  * Main client for interacting with the urlscan.io API.
@@ -11,7 +14,17 @@ import io.urlscan.client.internal.createPlatformHttpClient
 class UrlScanClient(
     private val config: UrlScanConfig = UrlScanConfig(""),
     private val httpClient: HttpClient = createPlatformHttpClient(config)
-) {
+) : Closeable {
+
+    @OptIn(ExperimentalAtomicApi::class)
+    private val closed = AtomicBoolean(false)
+
+    @OptIn(ExperimentalAtomicApi::class)
+    override fun close() {
+        if (closed.compareAndSet(expectedValue = false, newValue = true)) {
+            httpClient.close()
+        }
+    }
 
     val generic: GenericApi by lazy {
         GenericApi(httpClient, config)
@@ -55,13 +68,5 @@ class UrlScanClient(
 
     val savedSearches: SavedSearchesApi by lazy {
         SavedSearchesApi(httpClient, config)
-    }
-
-
-    /**
-     * Close the HTTP client and release resources.
-     */
-    fun close() {
-        httpClient.close()
     }
 }
