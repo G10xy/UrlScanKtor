@@ -53,6 +53,9 @@ class UrlScanClient(
         FilesApi(httpClient, config)
     }
 
+    val savedSearches: SavedSearchesApi by lazy {
+        SavedSearchesApi(httpClient, config)
+    }
 
 
     /**
